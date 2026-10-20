@@ -8,8 +8,8 @@ env:
 
 jobs:
   name: CI
-    runs-on: ubuntu-latest
-    steps:
+  runs-on: ubuntu-latest
+  steps:
       - name: Checkout code
         run: actions/checkout@v4
       - name: Navigate to code directory
