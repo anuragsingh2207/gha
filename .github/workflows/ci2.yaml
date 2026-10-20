@@ -36,7 +36,7 @@ jobs:
       uses: aquasecurity/trivy-action@v0.3.6
       with:
         image-ref: anuragsingh2207/python:${{env.IMAGE_TAG}}
-        severity:'CRITICAL,HIGH'
+        severity: 'CRITICAL,HIGH'
         format: 'table'
         exit-code: '1'
     - name: Setup Docker image_tag Output
