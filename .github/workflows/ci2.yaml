@@ -12,7 +12,7 @@ on:
 
 env:
   MESSAGE: "Hello from GHA"
-  IMAGE_TAG: ${{ github.event_name = "release" && 0.0.2 || github.inputs.image_tag }}
+  IMAGE_TAG: ${{ github.event_name == "release" && '0.0.2' || github.inputs.image_tag }}
 
 jobs:
   build:
@@ -35,18 +35,18 @@ jobs:
     - name: Trivy Scan
       uses: aquasecurity/trivy-action@v0.3.6
       with:
-        image-ref:anuragsingh2207/python:${{env.IMAGE_TAG}}
-        severity: 'CRITICAL,HIGH'
+        image-ref: anuragsingh2207/python:${{env.IMAGE_TAG}}
+        severity:'CRITICAL,HIGH'
         format: 'table'
         exit-code: '1'
     - name: Setup Docker image_tag Output
       id: set-output
-      run: echo "image_tag=${{env.IMAGE_TAG}}" >> $GITHUB_TOKEN
+      run: echo "image_tag=${{env.IMAGE_TAG}}" >> $GITHUB_OUTPUT
     - name: Docker Login
       uses: actions/docker-login@v4
       with: 
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME}}
-        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD}}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Docker Push 
       run: docker push anuragsingh2207/python:${{env.IMAGE_TAG}}
   
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate to GCP 
-        uses: google-github-actions/authenticate@v2
+        uses: google-github-actions/auth@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT}}
           workload_identity_provider: ${{ secrets.WIF_PROVIDER}}
