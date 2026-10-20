@@ -18,7 +18,7 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
-    output: ${{steps.set-output.outputs.image_tag}}
+    outputs: ${{steps.set-output.outputs.image_tag}}
     steps:
     - name: Checkout Code
       uses: actions/checkout@v5
