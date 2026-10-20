@@ -18,7 +18,7 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
-    outputs: ${{steps.set-output.outputs.image_tag}}
+    outputs: ${{steps.tag.outputs.image_tag}}
     steps:
     - name: Checkout Code
       uses: actions/checkout@v5
@@ -40,7 +40,7 @@ jobs:
         format: 'table'
         exit-code: '1'
     - name: Setup Docker image_tag Output
-      id: set-output
+      id: tag
       run: echo "image_tag=${{env.IMAGE_TAG}}" >> $GITHUB_OUTPUT
     - name: Docker Login
       uses: actions/docker-login@v4
@@ -68,11 +68,11 @@ jobs:
         run: gcloud auth configure-docker eu-docker.pkg.dev
       - name: Push docker image to GAR
         run: |-
-          docker tag anuragsingh2207/python:${{env.IMAGE_TAG}} eu-docker.pkg.dev/prj123/python:${{env.IMAGE_TAG}}
+          docker tag anuragsingh2207/python:${{env.IMAGE_TAG}} eu-docker.pkg.dev/prj123/python:${{outputs.image_tag}}
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloud-run
         with:
           service: 'github-python-gist'
-          image: eu-docker.pkg.dev/prj123/python:${{env.IMAGE_TAG}}
+          image: eu-docker.pkg.dev/prj123/python:${{outputs.image_tag}}
 
 
