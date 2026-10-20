@@ -1,0 +1,79 @@
+name: Python CI
+on:
+  push:
+    branches: [main, feature/*]
+  workflow_dispatch:
+    inputs:
+  	  - image_tag:
+        type: string
+        required: true
+        default: 0.0.1
+  release: 
+
+env:
+  MESSAGE: "Hello from GHA"
+  IMAGE_TAG: ${{ github.event_name = "release" && 0.0.2 || github.inputs.image_tag }}
+
+jobs:
+	build:
+	  name: build
+	  runs-on: ubuntu-latest
+	  output: ${{steps.set-output.outputs.image_tag}}
+	  	image_tag: 
+	  steps:
+	  - name: Checkout Code
+	  	uses: actions/checkout@v5
+	  - name: Setup Python
+	    uses: actions/setup-python@v5
+	  - name: Print Message
+	    run: echo ${{ env.MESSAGE }}
+	  - name: Install Dependencies for Pytest
+	    run: pip install -r dev-requirements.txt
+	  - name: Run Pytest
+	  	run: pytest
+	  - name: Build docker image
+	  	run: docker build -t anuragsingh2207/python:${{env.IMAGE_TAG}}
+	  - name: Trivy Scan
+	  	uses: aquasecurity/trivy-action@v0.3.6
+	  	with:
+	  	  image-ref:anuragsingh2207/python:${{env.IMAGE_TAG}}
+	  	  severity: 'CRITICAL,HIGH'
+	  	  format: 'table'
+	  	  exit-code: '1'
+	  - name: Setup Docker image_tag Output
+	    id: set-output
+	  	run: echo "image_tag=${{env.IMAGE_TAG}}" >> $GITHUB_TOKEN
+	  - name: Docker Login
+	    uses: actions/docker-login@v4
+	    with: 
+	     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME}}
+	     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_PASSWORD}}
+	  - name: Docker Push 
+	  	run: docker push anuragsingh2207/python:${{env.IMAGE_TAG}}
+  
+  deploy:
+	  name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+	  steps:
+	    - name: Authenticate to GCP 
+	      uses: google-github-actions/authenticate@v2
+	      with:
+	      	project_id: ${{ secrets.GCP_PROJECT}}
+	      	workload_identity_provider: ${{ secrets.WIF_PROVIDER}}
+	    - name: Setup Gcloud 
+	      uses: google-github-actions/setup-gcloud@v3
+	    - name: Validate gcloud setup
+	      run: gcloud info
+	    - name: Authenticate to GAR
+	      run: gcloud auth configure-docker eu-docker.pkg.dev
+	    - name: Push docker image to GAR
+	      run: |-
+	      	docker tag anuragsingh2207/python:${{env.IMAGE_TAG}} eu-docker.pkg.dev/prj123/python:${{env.IMAGE_TAG}}
+	    - name: Deploy to Cloud Run
+	      uses: google-github-actions/deploy-cloud-run
+	      with:
+	      	service: 'github-python-gist'
+	      	image: eu-docker.pkg.dev/prj123/python:${{env.IMAGE_TAG}}
+
+
