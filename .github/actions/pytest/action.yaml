@@ -18,3 +18,4 @@ runs:
       run: pip install -r test-requirements.txt
     - name: Run pytest
       run: pytest
+      shell: bash
