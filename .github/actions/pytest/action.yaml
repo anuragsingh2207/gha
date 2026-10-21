@@ -16,6 +16,7 @@ runs:
         python-version: ${{ inputs.python-version }}
     - name: Install Dependencies
       run: pip install -r test-requirements.txt
+      shell: bash
     - name: Run pytest
       run: pytest
       shell: bash
