@@ -12,7 +12,7 @@ on:
 
 env:
   MESSAGE: "Hello from GHA"
-  IMAGE_TAG: ${{ github.event_name == 'release' && '0.0.2' || github.inputs.image_tag ||  '0.0.3'}}
+  IMAGE_TAG: ${{ github.event_name == 'release' && '0.0.2' ||  '0.0.3'}}
 
 jobs:
   build:
