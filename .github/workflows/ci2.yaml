@@ -23,14 +23,10 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v5
-    - name: Setup Python
-      uses: actions/setup-python@v5
     - name: Print Message
       run: echo ${{ env.MESSAGE }}
-    - name: Install Dependencies for Pytest
-      run: pip install -r test-requirements.txt
     - name: Run Pytest
-      run: pytest
+      uses: .github/actions/pytest
     - name: Build docker image
       run: docker build -t anuragsingh2207/python:${{env.IMAGE_TAG}} .
     - name: Trivy Scan

@@ -13,12 +13,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-      - name: Setup Python
-        uses: actions/setup-python@v4
-      - name: Install Dependencies
-        run: pip install -r test-requirements.txt
+      - name: Print Message
+        run: echo ${{ env.MESSAGE }}
       - name: Run pytest
-        run: pytest
+        uses: .github/actions/pytest
       - name: Build Docker image 
         run: docker build -t anuragsingh2207/python:0.0.1 .
       - name: Run Trivy vulnerability scanner
