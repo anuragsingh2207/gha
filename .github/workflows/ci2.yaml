@@ -56,24 +56,26 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Authenticate to GCP 
-        uses: google-github-actions/auth@v2
-        with:
-          project_id: ${{ secrets.GCP_PROJECT}}
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER}}
+      - name: Print image tag
+        run: echo ${{ needs.build.outputs.image_tag }}
+      # - name: Authenticate to GCP 
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     project_id: ${{ secrets.GCP_PROJECT}}
+      #     workload_identity_provider: ${{ secrets.WIF_PROVIDER}}
       - name: Setup Gcloud 
         uses: google-github-actions/setup-gcloud@v3
       - name: Validate gcloud setup
         run: gcloud info
-      - name: Authenticate to GAR
-        run: gcloud auth configure-docker eu-docker.pkg.dev
-      - name: Push docker image to GAR
-        run: |-
-          docker tag anuragsingh2207/python:${{env.IMAGE_TAG}} eu-docker.pkg.dev/prj123/python:${{needs.build.outputs.image_tag}}
-      - name: Deploy to Cloud Run
-        uses: google-github-actions/deploy-cloud-run
-        with:
-          service: 'github-python-gist'
-          image: eu-docker.pkg.dev/prj123/python:${{needs.build.outputs.image_tag}}
+      # - name: Authenticate to GAR
+      #   run: gcloud auth configure-docker eu-docker.pkg.dev
+      # - name: Push docker image to GAR
+      #   run: |-
+      #     docker tag anuragsingh2207/python:${{env.IMAGE_TAG}} eu-docker.pkg.dev/prj123/python:${{needs.build.outputs.image_tag}}
+      # - name: Deploy to Cloud Run
+      #   uses: google-github-actions/deploy-cloud-run
+      #   with:
+      #     service: 'github-python-gist'
+      #     image: eu-docker.pkg.dev/prj123/python:${{needs.build.outputs.image_tag}}
 
 
