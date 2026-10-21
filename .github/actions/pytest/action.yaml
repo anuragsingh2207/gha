@@ -17,6 +17,19 @@ runs:
     - name: Install Dependencies
       run: pip install -r test-requirements.txt
       shell: bash
-    - name: Run pytest
-      run: pytest
+    - name: Run pytest with JSON coverage
+      id: pytest-cov
       shell: bash
+      run: |
+          pytest --cov=. --cov-report=json:coverage.json
+          # Extract total coverage percentage (integer)
+          COVERAGE=$(python -c "import json; data=json.load(open('coverage.json')); print(int(data['totals']['percent_covered']))")
+          echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+          echo "Coverage is $COVERAGE%"
+
+    - name: Run extra step if coverage > 90%
+      if: steps.pytest-cov.outputs.coverage > 90
+      shell: bash
+      run: |
+          echo "Coverage is above 80%! Running extra step..."
+        
