@@ -26,7 +26,7 @@ jobs:
     - name: Print Message
       run: echo ${{ env.MESSAGE }}
     - name: Run Pytest
-      uses: ./.github/actions/pytest
+      uses: ./github/actions/pytest
       with:
         python-version: 3.11
     - name: Build docker image
