@@ -69,7 +69,7 @@ jobs:
         run: gcloud auth configure-docker eu-docker.pkg.dev
       - name: Push docker image to GAR
         run: |-
-          docker tag anuragsingh2207/python:${{env.IMAGE_TAG}} eu-docker.pkg.dev/prj123/python:${{outputs.image_tag}}
+          docker tag anuragsingh2207/python:${{env.IMAGE_TAG}} eu-docker.pkg.dev/prj123/python:${{needs.build.outputs.image_tag}}
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloud-run
         with:
