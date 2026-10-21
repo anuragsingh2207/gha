@@ -28,7 +28,7 @@ jobs:
     - name: Print Message
       run: echo ${{ env.MESSAGE }}
     - name: Install Dependencies for Pytest
-      run: pip install -r dev-requirements.txt
+      run: pip install -r test-requirements.txt
     - name: Run Pytest
       run: pytest
     - name: Build docker image
