@@ -74,6 +74,6 @@ jobs:
         uses: google-github-actions/deploy-cloud-run
         with:
           service: 'github-python-gist'
-          image: eu-docker.pkg.dev/prj123/python:${{outputs.image_tag}}
+          image: eu-docker.pkg.dev/prj123/python:${{needs.build.outputs.image_tag}}
 
 
