@@ -31,5 +31,5 @@ runs:
       if: steps.pytest-cov.outputs.coverage > 90
       shell: bash
       run: |
-          echo "Coverage is above 80%! Running extra step..."
+          echo "Coverage is above 90%! "
         
