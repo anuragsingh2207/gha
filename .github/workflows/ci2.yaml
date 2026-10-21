@@ -1,4 +1,4 @@
-name: Python CI
+name: Python CI2
 on:
   push:
     branches: [main, feature/*]
@@ -18,7 +18,8 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
-    outputs: ${{steps.tag.outputs.image_tag}}
+    outputs: 
+      image_tag: ${{steps.tag.outputs.image_tag}}
     steps:
     - name: Checkout Code
       uses: actions/checkout@v5
