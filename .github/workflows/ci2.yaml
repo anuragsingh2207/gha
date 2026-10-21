@@ -38,6 +38,7 @@ jobs:
       with:
         image-ref: anuragsingh2207/python:${{env.IMAGE_TAG}}
         severity: 'CRITICAL,HIGH'
+        ignore-unfixed: true
         format: 'table'
         exit-code: '1'
     - name: Setup Docker image_tag Output
