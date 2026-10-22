@@ -25,7 +25,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r test-requirements.txt 
       - name: Run pytest
-        run: pytest
+        run: pytest --html=report.html --self-contained-html
+      - name: Upload pytest report
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-report
+          path: report.html
       - name: Build Docker image 
         run: docker build -t anuragsingh2207/python:0.0.1 .
       - name: Run Trivy vulnerability scanner
@@ -44,3 +49,18 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Docker Push
         run: docker push anuragsingh2207/python:0.0.1
+  ci2:
+    name: CI2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Print Message
+        run: echo ${{ env.MESSAGE }}
+      - name: Download pytest report
+        uses: actions/download-artifact@v3
+        with:
+          name: pytest-report
+          path: report.html
+      - name: Check files
+        run: ls -la
