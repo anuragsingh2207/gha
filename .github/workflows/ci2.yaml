@@ -28,11 +28,11 @@ jobs:
     - name: Print workflow level env var
       run: echo ${{ env.ENV1 }}
     - name: Print job level env var
-      run: echo ${{ job.ENV2 }}
+      run: echo "$ENV2"
     - name: Print step level env var
       env:
         ENV3: "Step Level Env Var"
-      run: echo ${{ steps.step1.outputs.ENV3 }}
+      run: echo "$ENV3"
     - name: Print built-in env vars
       run: |
         echo "GITHUB_REPOSITORY: ${{ github.repository }}"
