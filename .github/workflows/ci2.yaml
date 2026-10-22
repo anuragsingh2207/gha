@@ -43,6 +43,11 @@ jobs:
         echo "GITHUB_WORKFLOW: ${{ github.workflow }}"
         echo "GITHUB_RUN_ID: ${{ github.run_id }}"
         echo "GITHUB_RUN_NUMBER: ${{ github.run_number }}"
+    - name: Set env vars dynamically
+      run:
+        echo "DYNAMIC_ENV_VAR=Dynamic Value" >> $GITHUB_ENV
+    - name: Print dynamically set env var
+      run: echo "$DYNAMIC_ENV_VAR"
     - name: Run Pytest
       uses: ./.github/actions/pytest
       with:
