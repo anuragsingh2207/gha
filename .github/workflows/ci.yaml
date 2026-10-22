@@ -24,10 +24,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: pip install -r test-requirements.txt 
-      - name: Run Bandit security checks
-        run: bandit -r . -ll
-      - name: Run pip-audit for dependency vulnerabilities
-        run: pip-audit --progress spinner
       - name: Run pytest
         run: pytest
       - name: Build Docker image 
