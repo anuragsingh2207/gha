@@ -33,6 +33,7 @@ jobs:
         with:
           name: pytest-report
           path: report.html
+          retention-days: 7
       - name: Build Docker image 
         run: docker build -t anuragsingh2207/python:0.0.1 .
       - name: Run Trivy vulnerability scanner
