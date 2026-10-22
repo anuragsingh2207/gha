@@ -10,15 +10,26 @@ jobs:
   ci: 
     name: CI
     runs-on: ubuntu-latest
+    startegy:
+      matrix:
+        python-version: [3.11, 3.12, 3.13]
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
       - name: Print Message
         run: echo ${{ env.MESSAGE }}
-      - name: Run pytest
-        uses: ./.github/actions/pytest
+      - name : Setup Python
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: pip install -r test-requirements.txt 
+      - name: Run Bandit security checks
+        run: bandit -r . -ll
+      - name: Run pip-audit for dependency vulnerabilities
+        run: pip-audit --progress spinner
+      - name: Run pytest
+        run: pytest
       - name: Build Docker image 
         run: docker build -t anuragsingh2207/python:0.0.1 .
       - name: Run Trivy vulnerability scanner
