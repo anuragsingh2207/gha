@@ -20,8 +20,6 @@ jobs:
     env:  
       ENV2: "Job Level Env Var"
     runs-on: ubuntu-latest
-    startegy:
-    
     outputs: 
       image_tag: ${{steps.tag.outputs.image_tag}}
     steps:
